@@ -1,0 +1,154 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Rubik:wght@300;400;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dashboard-wrap {
+  min-height: calc(100vh - 20.95rem);
+}
+@media screen and (max-width: 768px) {
+  .dashboard-wrap {
+    min-height: calc(100vh - 18rem);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-neutral-100 dark:bg-neutral-900 text-black dark:text-white
+  }
+  a:hover {
+    @apply text-black dark:text-white transition-colors duration-300;
+  }
+  label, span {
+    @apply select-none
+  }
+}
+
+@layer components {
+  .btn {
+    @apply text-white dark:text-black bg-black dark:bg-white px-4 py-2 text-sm inline-flex items-center justify-center font-semibold rounded-lg transition-all
+  }
+  .btn.danger {
+    @apply bg-danger dark:bg-danger text-white hover:shadow-red-600 hover:dark:text-white !important
+  }
+  .btn.info {
+    @apply bg-info dark:bg-info text-white hover:shadow-[#01579b] hover:dark:text-white !important
+  }
+  .btn:hover {
+    @apply -translate-y-0.5 dark:text-black text-white transition-all duration-300
+  }
+  .btn.hoverShadow:hover {
+    @apply shadow-lg shadow-neutral-600
+  }
+  .btn:disabled {
+    @apply bg-neutral-600 text-neutral-400 translate-y-0 shadow-none
+  }
+  .btn.loading:before {
+    @apply content-[""] w-5 h-5 rounded-full border-2 animate-spin border-t-transparent border-l-transparent
+  }
+  .input {
+    @apply px-4 py-3 rounded-xl text-xs bg-white dark:bg-black border dark:border-neutral-700 disabled:bg-neutral-700 transition-all ease-in-out duration-300
+  }
+  .input:focus {
+    @apply outline-none pl-5 placeholder-transparent placeholder:transition-colors placeholder:duration-300
+  }
+  .input[type="number"] {
+    @apply appearance-none
+  }
+  .select {
+    @apply cursor-pointer select-none pl-4 pr-8 py-3 rounded-xl text-sm bg-white dark:bg-black border dark:border-neutral-700 disabled:bg-neutral-700 transition-all ease-in-out duration-300 appearance-none
+  }
+  .select:focus {
+    @apply outline-none 
+  }
+  .select>span {
+    @apply inline-flex absolute text-neutral-500 right-2 top-3 bg-white dark:bg-black transition-transform duration-300
+  }
+  .options {
+    @apply md:absolute md:top-full md:w-full md:left-auto md:right-auto md:max-h-48 transition-all overflow-auto duration-300 mt-1 border dark:border-neutral-700 bg-white dark:bg-black z-30 rounded-lg shadow-lg
+    fixed top-[25vw] left-[5vw] w-[90vw] max-h-[65vh] ;
+  }
+  .options::-webkit-scrollbar {
+    @apply w-2
+  }
+  .options::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 dark:bg-neutral-700 rounded-full
+  }
+  .options>.option {
+    @apply px-4 py-4 md:py-3 select-none text-sm md:text-xs cursor-pointer border-b md:border-none dark:border-neutral-900 hover:bg-neutral-200 hover:dark:bg-neutral-700
+  }
+  .options>.selected {
+    @apply dark:bg-neutral-200 bg-neutral-800 dark:text-black text-white hover:bg-black hover:dark:bg-white
+  }
+  .options>.focused {
+    @apply dark:bg-neutral-500 bg-neutral-100
+  }
+  .options>.disabled {
+    @apply opacity-50 cursor-not-allowed
+  }
+  .checkbox {
+    @apply cursor-pointer h-4 w-4 rounded-sm
+  }
+  .checkbox[checked=true] {
+    @apply bg-no-repeat
+  }
+  .table-parent {
+    @apply table w-full border-separate text-xs
+  }
+  .table-parent td {
+    @apply p-4 border-b border-neutral-300 dark:border-neutral-700
+  }
+  .table-parent>tbody>tr:first-child>td {
+    @apply border-t-0
+  }
+  .table-parent th {
+    @apply p-4
+  }
+  .table-parent>thead>tr>th, .table-parent>tfoot>tr>th {
+    @apply text-left select-none font-semibold bg-white dark:bg-black text-neutral-600 dark:text-neutral-400
+  }
+  .table-parent>thead>tr>th:first-child, .table-parent>tfoot>tr>th:first-child {
+    @apply rounded-l-lg border-l dark:border-neutral-800
+  }
+  .table-parent>thead>tr>th, .table-parent>tfoot>tr>th {
+    @apply border-t border-b dark:border-neutral-800
+  }
+  .table-parent>thead>tr>th:last-child, .table-parent>tfoot>tr>th:last-child {
+    @apply rounded-r-lg border-r dark:border-neutral-800
+  }
+  .table-parent>tbody>tr>td {
+    @apply text-sm
+  }
+  .pagination {
+    @apply flex justify-center space-x-2 items-center
+  }
+  .pagination>button {
+    @apply bg-white dark:bg-black text-neutral-600 dark:text-neutral-400 text-sm h-8 w-8 rounded-lg border dark:border-none
+  }
+  .pagination>button:hover {
+    @apply bg-neutral-200 dark:bg-neutral-700
+  }
+  .pagination>button.disabled {
+    @apply opacity-50 cursor-not-allowed hover:bg-black
+  }
+  .pagination>button.active {
+    @apply bg-neutral-500 dark:bg-neutral-100 text-white dark:text-black
+  }
+}
+
+@layer utilities {
+  .form-group {
+    @apply flex flex-col
+  }
+  .submenu > a {
+    @apply relative transition-colors hover:text-black dark:hover:text-white;
+  }
+  .submenu > .active::after {
+    content: ' ';
+    @apply absolute bottom-[-0.8rem] left-0 h-0.5 w-full rounded-full dark:bg-neutral-200 bg-neutral-700
+  }
+  .submenu .active {
+    @apply text-black dark:text-white font-semibold;
+  }
+}
