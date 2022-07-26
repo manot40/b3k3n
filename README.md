@@ -1,4 +1,7 @@
-This is a simple blog site bootstraped with NextJS and TailwindCSS. Created in order to complete assignment challenge for FE position at [Deall](https://usedeall.com). The site design heavily inspired by [GeistUI](https://geist-ui.dev/en-us).
+This is a simple book catalog webapp bootstraped with NextJS and TailwindCSS. Created in order to complete assignment challenge for FE position at [Deall](https://usedeall.com). The site design heavily inspired by [GeistUI](https://geist-ui.dev/en-us).
+
+![preview](https://i.imgur.com/IqAdnLm.png)
+![performance](https://i.imgur.com/EXckYrw.png)
 
 ## Getting Started
 
@@ -28,6 +31,37 @@ npm run dev
 
 Open [http://127.0.0.1:3000](http://localhost:3000) with your browser to see the result.
 
-## How This App Work
+## What could be improved from the API endpoint?
 
-WIP
+1. Add total number of available entry, so the frontend could process the pagination procedure.
+2. JSON sent from endpoint could be more polished with additional information.
+3. When there is no book list available, I think it's better to show a message and empty list instead throwing 404 HTTP Code, since the endpoint clearly found.
+
+## My workaround for the problem?
+
+1. Implement proxy to communicate with original API backend. This way, I could bypass the CORS issue.
+2. Added total number of available entry, so the frontend could process the pagination procedure.
+3. Prevent the backend to sent 404 error when the list is empty but resource endpoint is available.
+4. Polished how backend reponse the request with appropriate message. Example:
+
+   ```
+   // Normal response
+   {
+      "success": true,
+      "message": "Books found",
+      "data": [{...}, {...}, {...}]
+   }
+
+   // List empty response
+   {
+      "success": true,
+      "message": "No book available",
+      "data": []
+   }
+
+   // Error response
+    {
+      "success": false,
+      "message": "Internal server error",
+    }
+   ```
