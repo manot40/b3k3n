@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { type FC, useMemo, useState } from 'react';
 
 import BookList from './BookList';
 import BookDetail from './BookDetail';
@@ -6,9 +6,9 @@ import { Pagination } from './reusable';
 import { useViewport } from 'utils/hooks';
 import { useBookmarks } from './BookmarkProvider';
 
-const MyBookmarks = ({}) => {
-  const { bookmarks } = useBookmarks();
+const MyBookmarks: FC<{ categories: Category[] }> = ({ categories = [] }) => {
   const { lg } = useViewport();
+  const { bookmarks } = useBookmarks();
 
   const [focusedBook, setFocusedBook] = useState({} as typeof bookmarks[number]);
 
@@ -42,7 +42,11 @@ const MyBookmarks = ({}) => {
 
   return (
     <div className="space-y-4">
-      <BookDetail book={focusedBook as Book} onClose={() => setFocusedBook({} as Book)} />
+      <BookDetail
+        categories={categories}
+        book={focusedBook as Book}
+        onClose={() => setFocusedBook({} as Book)}
+      />
       <div className="grid justify-items-center gap-4 grid-cols-2 sm:grid-cols-4 lg:grid-cols-5">
         <BookList data={books as Book[]} onFocus={openModal} skeleton={limit} />
       </div>

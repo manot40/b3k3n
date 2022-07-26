@@ -3,10 +3,12 @@ import { Modal } from './reusable';
 
 type BookDetailProp = {
   book: Book;
+  categories: Category[];
   onClose: () => void;
 };
 
-const BookDetail = ({ book, onClose }: BookDetailProp) => {
+const BookDetail = ({ book, categories, onClose }: BookDetailProp) => {
+  const category = categories?.find(cat => cat.id === book.category_id)?.name || '';
   return (
     <Modal isOpen={!!book.title} onClose={onClose}>
       <Modal.Header>
@@ -15,10 +17,16 @@ const BookDetail = ({ book, onClose }: BookDetailProp) => {
       <Modal.Body>
         <div className="flex space-x-4">
           <BookList.Card book={book} />
-          <div>
+          <div className="text-sm">
             <h2 className="font-bold text-lg">{book.title}</h2>
-            <p className="text-sm mt-2 mb-6 sm:mt-0 italic">{book.authors?.join(', ')}</p>
-            <div className="text-sm">
+            <p className="italic mb-2">{book.authors?.join(', ')}</p>
+            <div className="text-gray-800 dark:text-gray-300 font-semibold text-xs">
+              <span className="bg-gray-200 dark:bg-neutral-700 px-2.5 py-0.5 rounded-md">
+                {category}
+              </span>
+            </div>
+            <br />
+            <div>
               <strong className="block mb-1">About this book</strong>
               <p>{book.description}</p>
             </div>

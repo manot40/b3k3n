@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 
 import { trimString } from 'utils';
 import { Button, NotFound } from './reusable';
@@ -24,8 +25,13 @@ const BookList = ({ data, onFocus, skeleton }: BookListProp) => {
   }
 
   function handleBookmark(book: Book) {
-    if (find(book.id)) remove(book.id);
-    else add(book);
+    if (find(book.id)) {
+      remove(book.id);
+      toast.success(`${book.title} removed from bookmarks`);
+    } else {
+      add(book);
+      toast.success(`${book.title} added to bookmarks`);
+    }
   }
 
   if (!data) return <BookList.Skeleton count={skeleton} />;

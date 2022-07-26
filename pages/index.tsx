@@ -1,19 +1,24 @@
-import { type NextPage } from 'next';
+import type { NextPage } from 'next';
 
+import useSWR from 'swr';
+
+import { fetcher } from 'utils';
 import { Container } from 'components/reusable';
 import BooksToRead from 'components/BooksToRead';
 import MyBookmarks from 'components/MyBookmarks';
 import BookmarksProvider from 'components/BookmarkProvider';
 
 const Home: NextPage = () => {
+  const { data: res } = useSWR(['/category'], fetcher.get);
+
   return (
     <Container className="space-y-12">
       <BookmarksProvider>
         <Section id="bookmarks" title="My Bookmarks" icon="bookmarks-outline">
-          <MyBookmarks />
+          <MyBookmarks categories={res?.data as Category[]} />
         </Section>
         <Section id="book-list" title="Books For Read" icon="book-outline">
-          <BooksToRead />
+          <BooksToRead categories={res?.data as Category[]} />
         </Section>
       </BookmarksProvider>
     </Container>

@@ -1,4 +1,5 @@
 import { type FC, useState, useEffect, useMemo } from 'react';
+import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
 import BookList from './BookList';
@@ -7,16 +8,16 @@ import { useViewport } from 'utils/hooks';
 import { Input, Pagination, Select } from './reusable';
 import { fetcher, qsFormat, searchArray } from 'utils';
 
-const BooksToRead: FC = () => {
+const BooksToRead: FC<{ categories: Category[] }> = ({ categories = [] }) => {
   const { lg } = useViewport();
+  const size = lg ? 10 : 8;
 
   const [search, setSearch] = useState('');
   const [pageCount, setPageCount] = useState(0);
-  const [categories, setCategories] = useState([] as Category[]);
   const [focusedBook, setFocusedBook] = useState<Book>({} as Book);
 
   const [meta, setMeta] = useState({
-    size: lg ? 10 : 8,
+    size,
     page: 0,
     categoryId: 1,
   });
@@ -27,14 +28,7 @@ const BooksToRead: FC = () => {
   );
 
   useEffect(() => {
-    fetcher
-      .get('/category')
-      .then(res => setCategories(res.data))
-      .catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    setMeta({ ...meta, size: lg ? 10 : 8 });
+    setMeta({ ...meta, size });
   }, [lg]);
 
   useEffect(() => {
@@ -59,7 +53,10 @@ const BooksToRead: FC = () => {
     return searchArray(data, 'title', search);
   }, [bookRes, search]);
 
-  if (error) return <div>failed to load</div>;
+  if (error) {
+    toast.error('Error fetching book list');
+    return <div className="mx-auto">Failed to load data</div>;
+  }
 
   return (
     <div className="space-y-4">
@@ -81,9 +78,13 @@ const BooksToRead: FC = () => {
           onChange={e => setSearch(e.target.value)}
         />
       </div>
-      <BookDetail book={focusedBook} onClose={() => setFocusedBook({} as Book)} />
+      <BookDetail
+        categories={categories}
+        book={focusedBook}
+        onClose={() => setFocusedBook({} as Book)}
+      />
       <div className="grid justify-items-center gap-4 grid-cols-2 sm:grid-cols-4 lg:grid-cols-5">
-        <BookList data={bookList} onFocus={openModal} skeleton={meta.size} />
+        <BookList data={bookList} onFocus={openModal} skeleton={size} />
       </div>
       <Pagination
         page={meta.page + 1}
