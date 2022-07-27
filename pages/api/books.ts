@@ -29,15 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   } catch (err: any) {
     const { response } = err;
-
-    if (response.status == 404)
-      return res.status(200).json({
-        message: 'No books found',
-        success: true,
-        count: 0,
-        data: [],
-      });
-
     res.status(response.status || 500).json({
       success: false,
       message: response.data?.message || 'Error when fetching resource(s)',

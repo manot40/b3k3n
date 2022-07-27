@@ -53,10 +53,7 @@ const BooksToRead: FC<{ categories: Category[] }> = ({ categories = [] }) => {
     return searchArray(data, 'title', search);
   }, [bookRes, search]);
 
-  if (error) {
-    toast.error('Error fetching book list');
-    return <div className="mx-auto">Failed to load data</div>;
-  }
+  if (error) return <div className="text-center">Failed to load data</div>;
 
   return (
     <div className="space-y-4">

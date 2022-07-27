@@ -27,12 +27,12 @@ const Main = ({ children, isOpen, onClose, onProceed }: IProps) => {
         className={clsx(
           { flex: isOpen },
           { hidden: !isOpen },
-          'overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-[999] inset-0 mb-4 w-full md:inset-0 h-modal md:h-full justify-center items-center'
+          'overflow-y-auto overflow-x-hidden fixed top-0 left-0 z-[999] inset-0 mb-4 w-full md:inset-0 h-modal md:h-full justify-center items-center'
         )}>
-        <div className="relative p-4 w-full max-w-2xl h-full md:h-auto">
+        <div className="relative p-4 w-full max-w-2xl h-full md:h-auto max-h-screen">
           <div
             onClick={onClose}
-            className="bg-neutral-600 dark:bg-black top-0 left-0 fixed w-full h-full transition-opacity z-40 opacity-75"
+            className="bg-neutral-600 dark:bg-black top-0 left-0 fixed w-full h-full z-40 opacity-75"
           />
           <div className="relative z-50 dark:bg-neutral-900 dark:border border-neutral-800 bg-white rounded-lg shadow animate-slideInDown">
             <div className="flex justify-between items-center p-4 rounded-t border-b border-gray-200 dark:border-neutral-600">
