@@ -15,8 +15,8 @@ const BookDetail = ({ book, categories, onClose }: BookDetailProp) => {
         <h1 className="font-bold text-lg">Book Details</h1>
       </Modal.Header>
       <Modal.Body>
-        <div className="flex space-x-4">
-          <BookList.Card book={book} />
+        <div className="flex flex-col md:flex-row">
+          <BookList.Card className="self-center mb-8 md:mb-0 md:mr-4" book={book} />
           <div className="text-sm">
             <h2 className="font-bold text-lg">{book.title}</h2>
             <p className="italic mb-2">{book.authors?.join(', ')}</p>

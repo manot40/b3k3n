@@ -1,4 +1,6 @@
 /* eslint-disable react/display-name */
+import type { HTMLAttributes } from 'react';
+
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 
@@ -12,9 +14,8 @@ type BookListProp = {
   onFocus?: (id: number) => void;
 };
 
-type BookCardProp = {
+type BookCardProp = Omit<HTMLAttributes<HTMLDivElement>, 'onClick'> & {
   book?: Book;
-  children?: JSX.Element;
   onClick?: (id: number) => void;
 };
 
@@ -77,10 +78,15 @@ const BookList = ({ data, onFocus, skeleton }: BookListProp) => {
   );
 };
 
-BookList.Card = ({ book, children, onClick }: BookCardProp) => {
+BookList.Card = ({ book, children, onClick, ...restProps }: BookCardProp) => {
   if (!book?.cover_url) return null;
   return (
-    <div className="flex items-start relative w-full mb-2 min-w-[8.99rem] max-w-[8.99rem] h-[13.5rem]">
+    <div
+      {...restProps}
+      className={
+        'flex items-start relative w-full mb-2 min-w-[8.99rem] max-w-[8.99rem] h-[13.5rem] ' +
+        restProps.className
+      }>
       <Image
         className="cursor-pointer rounded shadow-md w-full max-h-full h-full"
         layout="fill"
