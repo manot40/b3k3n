@@ -20,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Fetch the actual data
     const { data } = await axios.get<Book[]>(URL, {
-      params: { ...req.query, page: +req.query.page - 1 },
+      params: { ...req.query, page: parseInt((req.query.page as string) || '1', 10) - 1 },
     });
 
     res.status(200).json({
