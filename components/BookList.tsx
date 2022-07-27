@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 

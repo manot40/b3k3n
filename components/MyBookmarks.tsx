@@ -17,7 +17,7 @@ const MyBookmarks: FC<{ categories: Category[] }> = ({ categories = [] }) => {
     else return 4;
   }, [lg]);
 
-  const { totalPages, itemIndex, changePage } = Pagination.usePagination({
+  const { itemIndex, changePage, ...pagination } = Pagination.usePagination({
     limit,
     totalItems: bookmarks.length,
   });
@@ -26,7 +26,7 @@ const MyBookmarks: FC<{ categories: Category[] }> = ({ categories = [] }) => {
     const { first, last } = itemIndex;
     const thisPage = bookmarks.slice(first, last);
     return thisPage.length ? thisPage : bookmarks.slice(first - limit, last);
-  }, [bookmarks, itemIndex]);
+  }, [bookmarks, itemIndex, limit]);
 
   function handlePageChange(page: number) {
     // @ts-ignore
@@ -50,7 +50,7 @@ const MyBookmarks: FC<{ categories: Category[] }> = ({ categories = [] }) => {
       <div className="grid justify-items-center gap-4 grid-cols-2 sm:grid-cols-4 lg:grid-cols-5">
         <BookList data={books as Book[]} onFocus={openModal} skeleton={limit} />
       </div>
-      <Pagination totalPages={totalPages} onPageChange={handlePageChange} />
+      <Pagination {...pagination} onPageChange={handlePageChange} />
     </div>
   );
 };

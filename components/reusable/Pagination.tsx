@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState, type HTMLAttributes } from 'react';
+import { useCallback, useEffect, useMemo, useState, type HTMLAttributes } from 'react';
 import clsx from 'clsx';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   page?: number;
   totalPages: number;
   initialPage?: number;
-  onPageChange?: (page: number) => void;
+  onPageChange?: (nextPage: number) => void;
 }
 
 type HookProps = {
@@ -23,14 +23,8 @@ export const Pagination = ({
 }: Props) => {
   const [currentPage, setCurrentPage] = useState(page || initialPage);
 
-  useEffect(() => {
-    page && setCurrentPage(page);
-  }, [page]);
-
   const pages = useMemo(() => {
     if (!totalPages) return [];
-
-    if (currentPage > totalPages) setCurrentPage(totalPages);
 
     if (totalPages < 6) {
       let x = [];
@@ -47,10 +41,21 @@ export const Pagination = ({
     }
   }, [currentPage, totalPages]);
 
-  function pageChanged(_page: number) {
-    !page && setCurrentPage(_page);
-    onPageChange && onPageChange(_page);
-  }
+  const pageChanged = useCallback(
+    (nextPage: number) => {
+      if (!page) setCurrentPage(nextPage);
+      onPageChange && onPageChange(nextPage);
+    },
+    [onPageChange, page]
+  );
+
+  useEffect(() => {
+    page && setCurrentPage(page);
+  }, [page]);
+
+  useEffect(() => {
+    if (totalPages && currentPage > totalPages) pageChanged(totalPages);
+  }, [currentPage, pageChanged, totalPages]);
 
   return (
     <div {...restProps} className={clsx('pagination', restProps.className)}>
@@ -110,8 +115,6 @@ Pagination.usePagination = ({ currentPage, totalItems, limit }: HookProps) => {
   };
 
   return {
-    next: () => changePage(page + 1),
-    prev: () => changePage(page - 1),
     changePage,
     totalPages,
     itemIndex,

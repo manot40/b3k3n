@@ -1,4 +1,11 @@
-import { createContext, useContext, useMemo, useState, useEffect } from 'react';
+import {
+  useMemo,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  createContext,
+} from 'react';
 
 type BookmarksContextType = {
   bookmarks: Omit<Book, 'sections'>[];
@@ -17,28 +24,31 @@ const BookmarksProvider = ({ children }: { children?: React.ReactNode }) => {
     if (bookmarks) setBookmarks(JSON.parse(bookmarks));
   }, []);
 
-  function add(book: Book) {
-    if (find(book.id)) return;
-    const { sections, ...newBook } = book;
-    const newData = [...bookmarks, newBook];
-    localStorage.setItem('bookmarks', JSON.stringify(newData));
-    setBookmarks(newData);
-  }
+  const find = useCallback(
+    (criteria: number | string) =>
+      bookmarks.find(b => b.id === criteria || b.title === criteria) || null,
+    [bookmarks]
+  );
 
-  function remove(id: number) {
-    const newData = bookmarks.filter(b => b.id !== id);
-    localStorage.setItem('bookmarks', JSON.stringify(newData));
-    setBookmarks(newData);
-  }
+  const add = useCallback(
+    (book: Book) => {
+      if (find(book.id)) return;
+      const { sections, ...newBook } = book;
+      const newData = [...bookmarks, newBook];
+      localStorage.setItem('bookmarks', JSON.stringify(newData));
+      setBookmarks(newData);
+    },
+    [bookmarks, find]
+  );
 
-  function find(criteria: number | string) {
-    return (
-      bookmarks.find(b => {
-        if (typeof criteria == 'number') return b.id === criteria;
-        return b.title === criteria + '';
-      }) || null
-    );
-  }
+  const remove = useCallback(
+    (id: number) => {
+      const newData = bookmarks.filter(b => b.id !== id);
+      localStorage.setItem('bookmarks', JSON.stringify(newData));
+      setBookmarks(newData);
+    },
+    [bookmarks]
+  );
 
   const memoed = useMemo(
     () => ({
@@ -47,7 +57,7 @@ const BookmarksProvider = ({ children }: { children?: React.ReactNode }) => {
       remove,
       bookmarks,
     }),
-    [bookmarks]
+    [add, bookmarks, find, remove]
   );
 
   return <BookmarksContext.Provider value={memoed}>{children}</BookmarksContext.Provider>;

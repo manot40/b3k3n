@@ -19,7 +19,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .catch(() => 0);
 
     // Fetch the actual data
-    const { data } = await axios.get<Book[]>(URL, { params: req.query });
+    const { data } = await axios.get<Book[]>(URL, {
+      params: { ...req.query, page: +req.query.page - 1 },
+    });
 
     res.status(200).json({
       message: 'Success fetching all books',

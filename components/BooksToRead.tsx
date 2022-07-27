@@ -1,5 +1,4 @@
 import { type FC, useState, useEffect, useMemo } from 'react';
-import toast from 'react-hot-toast';
 import useSWR from 'swr';
 
 import BookList from './BookList';
@@ -18,7 +17,7 @@ const BooksToRead: FC<{ categories: Category[] }> = ({ categories = [] }) => {
 
   const [meta, setMeta] = useState({
     size,
-    page: 0,
+    page: 1,
     categoryId: 1,
   });
 
@@ -28,17 +27,18 @@ const BooksToRead: FC<{ categories: Category[] }> = ({ categories = [] }) => {
   );
 
   useEffect(() => {
-    setMeta({ ...meta, size });
+    setMeta({ ...meta, size, page: 1 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lg]);
 
   useEffect(() => {
     if (bookRes) setPageCount(Math.ceil(bookRes.count / meta.size));
-  }, [bookRes]);
+  }, [bookRes, meta.size]);
 
   function handlePageChange(page: number) {
     // @ts-ignore
     const top = document.querySelector('#book-list')?.offsetTop - 20;
-    setMeta({ ...meta, page: page - 1 });
+    setMeta({ ...meta, page });
     if (top) window.scrollTo({ top, behavior: 'smooth' });
   }
 
@@ -65,7 +65,7 @@ const BooksToRead: FC<{ categories: Category[] }> = ({ categories = [] }) => {
           className="min-w-[200px]"
           placeholder="Select Category"
           value={categories[0]?.id + ''}
-          onChange={e => e && setMeta({ ...meta, page: 0, categoryId: +e })}
+          onChange={e => e && setMeta({ ...meta, page: 1, categoryId: +e })}
         />
         <Input
           value={search}
@@ -84,7 +84,7 @@ const BooksToRead: FC<{ categories: Category[] }> = ({ categories = [] }) => {
         <BookList data={bookList} onFocus={openModal} skeleton={size} />
       </div>
       <Pagination
-        page={meta.page + 1}
+        page={meta.page}
         totalPages={pageCount}
         onPageChange={handlePageChange}
       />
